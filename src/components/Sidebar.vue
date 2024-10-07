@@ -1,10 +1,10 @@
 <template>
-  <aside :class="{ 'is-open': sidebarStore.isOpen, 'mobile': isMobile }">
+  <aside :class="{ 'is-open': sidebarStore.isOpen, 'mobile': isMobile, 'hidden': !sidebarStore.isOpen && isMobile }">
     <div class="top-section">
       <div class="logo">
         <img src="../assets/profile-picture.jpg" alt="haquire" class="profile-picture">
       </div>
-      <div class="menu-toggle-wrapper" :class="{ 'open': sidebarStore.isOpen }">
+      <div v-if="!isMobile" class="menu-toggle-wrapper" :class="{ 'open': sidebarStore.isOpen }">
         <button class="menu-toggle" @click="ToggleMenu">
           <span class="material-icons">{{ sidebarStore.isOpen ? 'menu_open' : 'menu' }}</span>
         </button>
@@ -45,6 +45,9 @@
       </router-link>
     </div>
   </aside>
+  <button v-if="isMobile" class="mobile-menu-toggle" @click="ToggleMenu">
+    <span class="material-icons">{{ sidebarStore.isOpen ? 'close' : 'menu' }}</span>
+  </button>
 </template>
 
 <script setup>
@@ -248,6 +251,10 @@ aside {
       }
     }
   }
+
+  &.hidden {
+    transform: translateX(-100%);
+  }
 }
 
 @media (min-width: 769px) {
@@ -271,6 +278,59 @@ aside {
         }
       }
     }
+  }
+}
+
+aside {
+  &.mobile {
+    width: 100%;
+    max-width: 100vw;
+    height: 100vh;
+    
+    &.is-open {
+      width: 100%;
+    }
+  }
+}
+
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 101;
+  background: var(--sidebar-bg-dark, #1a1a1a); // Darker background color
+  color: var(--sidebar-color);
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--primary);
+  }
+}
+
+@media (max-width: 768px) {
+  aside {
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    
+    &.is-open {
+      transform: translateX(0);
+    }
+    
+    &.hidden {
+      transform: translateX(-100%);
+    }
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
