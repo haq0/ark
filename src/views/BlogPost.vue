@@ -139,6 +139,7 @@ watch(() => route.params.slug, loadPost);
 .blog-post {
   flex: 1;
   max-width: 800px;
+  padding: 0 1rem; /* Add padding to the sides of the blog post */
 }
 
 .post-card {
@@ -372,6 +373,12 @@ watch(() => route.params.slug, loadPost);
 @media (max-width: 1200px) {
   .blog-post-container {
     flex-direction: column;
+    padding: 1rem; /* Reduce padding on smaller screens */
+  }
+
+  .blog-post {
+    max-width: 100%; /* Allow full width on smaller screens */
+    padding: 0; /* Remove side padding on smaller screens */
   }
 
   .table-of-contents {

@@ -97,6 +97,7 @@ body {
   padding: 2rem;
   overflow-y: auto;
   margin-left: var(--sidebar-width);
+  max-width: calc(100% - var(--sidebar-width)); /* Ensure content doesn't overlap sidebar */
 }
 
 main {
@@ -141,6 +142,7 @@ button {
   .content {
     margin-left: 0;
     padding: 1rem;
+    max-width: 100%; /* Allow full width on mobile */
   }
 
   body {
