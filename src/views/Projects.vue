@@ -1,5 +1,5 @@
 <template>
-  <main class="projects">
+  <main class="projects" :class="{ 'sidebar-closed': !isSidebarOpen }">
     <h1 class="title">My Projects</h1>
     <div class="projects-grid">
       <div v-for="(project, index) in projects" :key="project.id" class="project-card" :style="{ animationDelay: `${index * 0.1}s` }">
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 
 const projects = ref([
   {
@@ -39,6 +39,8 @@ const projects = ref([
     technologies: ['Vue.js', 'JavaScript', 'HTML', 'CSS', 'Vite'],
   },
 ]);
+
+const isSidebarOpen = inject('isSidebarOpen');
 </script>
 
 <style scoped>
@@ -46,6 +48,11 @@ const projects = ref([
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.projects.sidebar-closed {
+  max-width: 100%;
 }
 
 .title {
@@ -59,6 +66,8 @@ const projects = ref([
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
 }
 
 .project-card {
@@ -67,7 +76,12 @@ const projects = ref([
   overflow: hidden;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  animation: fadeInUp 1s ease-out both;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  width: 100%;
+  max-width: 300px;
 }
 
 :global(.dark) .project-card {
@@ -189,5 +203,15 @@ const projects = ref([
   --card-bg: #1e1e2e;
   --text-primary: #fff;
   --text-secondary: #aaa;
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    max-width: 100%;
+  }
 }
 </style>

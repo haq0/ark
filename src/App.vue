@@ -1,12 +1,14 @@
 <template>
-  <div class="app" :class="currentTheme">
-    <Sidebar />
-    <div class="content">
-      <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
+  <div class="app" :class="[currentTheme, { 'sidebar-closed': !isSidebarOpen }]">
+    <Sidebar @toggle-sidebar="toggleSidebar" :is-open="isSidebarOpen" />
+    <div class="content-wrapper">
+      <div class="content">
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -16,6 +18,7 @@ import { ref, provide, onMounted, watch } from 'vue';
 import Sidebar from "./components/Sidebar.vue";
 
 const currentTheme = ref(localStorage.getItem('theme') || 'dark');
+const isSidebarOpen = ref(localStorage.getItem('sidebarOpen') !== 'false');
 
 const changeTheme = (theme) => {
   currentTheme.value = theme;
@@ -23,8 +26,14 @@ const changeTheme = (theme) => {
   document.body.className = theme;
 };
 
+const toggleSidebar = () => {
+  isSidebarOpen.value = !isSidebarOpen.value;
+  localStorage.setItem('sidebarOpen', isSidebarOpen.value);
+};
+
 provide('currentTheme', currentTheme);
 provide('changeTheme', changeTheme);
+provide('isSidebarOpen', isSidebarOpen);
 
 onMounted(() => {
   document.body.className = currentTheme.value;
@@ -89,15 +98,22 @@ body {
   min-height: 100vh;
 }
 
-.content {
+.content-wrapper {
   flex: 1;
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: var(--sidebar-width);
+}
+
+.sidebar-closed .content-wrapper {
+  margin-left: 0;
+}
+
+.content {
   background: var(--light);
   color: var(--dark);
-  transition: all 0.3s ease-in-out;
   padding: 2rem;
+  min-height: 100vh;
   overflow-y: auto;
-  margin-left: var(--sidebar-width);
-  max-width: calc(100% - var(--sidebar-width)); /* Ensure content doesn't overlap sidebar */
 }
 
 main {
@@ -135,14 +151,8 @@ button {
 }
 
 @media (max-width: 768px) {
-  .app {
-    flex-direction: column;
-  }
-
-  .content {
+  .content-wrapper {
     margin-left: 0;
-    padding: 1rem;
-    max-width: 100%; /* Allow full width on mobile */
   }
 
   body {
