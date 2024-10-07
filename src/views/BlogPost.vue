@@ -139,7 +139,7 @@ watch(() => route.params.slug, loadPost);
 .blog-post {
   flex: 1;
   max-width: 800px;
-  padding: 0 1rem; /* Add padding to the sides of the blog post */
+  padding: 0 2rem; /* Add padding to the sides of the blog post */
 }
 
 .post-card {
