@@ -4,9 +4,13 @@
     <div class="blog-posts">
       <article v-for="post in blogPosts" :key="post.id" class="blog-post">
         <h2 class="post-title">{{ post.title }}</h2>
-        <p class="post-date">{{ post.date }}</p>
+        <p class="post-date">{{ formatDate(post.date) }}</p>
+        <p class="post-read-time">{{ post.readTime }} min read</p>
         <p class="post-excerpt">{{ post.excerpt }}</p>
-        <a :href="post.link" class="read-more">Read More</a>
+        <div class="post-meta">
+          <span v-for="tag in post.tags" :key="tag" class="post-tag">{{ tag }}</span>
+        </div>
+        <router-link :to="`/blog/${post.slug}`" class="read-more">Read More</router-link>
       </article>
     </div>
   </main>
@@ -18,12 +22,21 @@ import { ref } from 'vue';
 const blogPosts = ref([
   {
     id: 1,
-    title: 'Blog Being Developed',
-    date: 'Coming Soon',
-    excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    link: '#'
-  },
+    title: "Haskell vs OCaml: A Tale of Two Functional Languages",
+    slug: "haskell-vs-ocaml",
+    date: "2023-05-15",
+    author: "haquire",
+    excerpt: "In the realm of functional programming, Haskell and OCaml stand out as two powerful and influential languages. Let's dive into a comparison of these two fascinating languages.",
+    image: "/images/blog/haskell-vs-ocaml.jpg",
+    tags: ["Functional Programming", "Haskell", "OCaml"],
+    readTime: 10
+  }
 ]);
+
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
 </script>
 
 <style scoped>
@@ -54,33 +67,41 @@ const blogPosts = ref([
   animation: fadeInUp 1s ease-out both;
 }
 
-:global(.dark) .blog-post {
-  background-color: #1e1e2e;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-}
-
 .blog-post:hover {
   transform: translateY(-5px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-:global(.dark) .blog-post:hover {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-}
-
 .post-title {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  color: var(--text-primary);
 }
 
-.post-date {
+.post-date, .post-read-time {
   font-size: 0.9rem;
-  color: var(--grey);
-  margin-bottom: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
 }
 
 .post-excerpt {
   margin-bottom: 1rem;
+  color: var(--text-secondary);
+}
+
+.post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-tag {
+  background-color: var(--primary);
+  color: var(--light);
+  padding: 0.2rem 0.5rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
 }
 
 .read-more {
@@ -120,17 +141,5 @@ const blogPosts = ref([
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-:root {
-  --card-bg: #f0f0f0;
-  --text-primary: #333;
-  --text-secondary: #666;
-}
-
-:global(.dark) {
-  --card-bg: #1e1e2e;
-  --text-primary: #fff;
-  --text-secondary: #aaa;
 }
 </style>

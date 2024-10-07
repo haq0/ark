@@ -15,19 +15,20 @@
 import { ref, provide, onMounted, watch } from 'vue';
 import Sidebar from "./components/Sidebar.vue";
 
-const currentTheme = ref('dark');
+const currentTheme = ref(localStorage.getItem('theme') || 'dark');
 
 const changeTheme = (theme) => {
   currentTheme.value = theme;
   localStorage.setItem('theme', theme);
+  document.body.className = theme;
 };
-
-onMounted(() => {
-  currentTheme.value = localStorage.getItem('theme') || 'dark';
-});
 
 provide('currentTheme', currentTheme);
 provide('changeTheme', changeTheme);
+
+onMounted(() => {
+  document.body.className = currentTheme.value;
+});
 
 watch(currentTheme, (newTheme) => {
   document.body.className = newTheme;
@@ -94,7 +95,8 @@ body {
   color: var(--dark);
   transition: all 0.3s ease-in-out;
   padding: 2rem;
-  overflow-x: hidden;
+  overflow-y: auto;
+  margin-left: var(--sidebar-width);
 }
 
 main {
@@ -137,6 +139,7 @@ button {
   }
 
   .content {
+    margin-left: 0;
     padding: 1rem;
   }
 

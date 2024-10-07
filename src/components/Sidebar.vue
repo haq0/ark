@@ -114,6 +114,11 @@ aside {
     background-color: var(--sidebar-bg);
     color: var(--sidebar-color);
     transition: 0.2s ease-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
 
     &.mobile {
         position: fixed;

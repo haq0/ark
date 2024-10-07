@@ -9,5 +9,14 @@ export default defineConfig({
   resolve: {
     alias: []
   },
-  base: '/'
+  base: '/',
+  server: {
+    proxy: {
+      '/blog-posts': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/blog-posts/, '/public/blog-posts')
+      }
+    }
+  }
 })

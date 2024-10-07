@@ -6,6 +6,7 @@ import Contact from '../views/Contact.vue'
 import Settings from '../views/Settings.vue'
 import Blog from '../views/Blog.vue'
 import Photography from '../views/Photography.vue'
+import BlogPost from '../views/BlogPost.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,10 @@ const router = createRouter({
     {
       path: '/photography',
       component: Photography
+    },
+    {
+      path: '/blog/:slug',
+      component: BlogPost
     }
   ]
 })

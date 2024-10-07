@@ -5,6 +5,7 @@
       "npm:@vitejs/plugin-vue@^5.0.4": "npm:@vitejs/plugin-vue@5.1.4_vite@5.4.8_vue@3.5.10",
       "npm:axios@^1.7.7": "npm:axios@1.7.7",
       "npm:cheerio@^1.0.0": "npm:cheerio@1.0.0",
+      "npm:highlight.js@^11.10.0": "npm:highlight.js@11.10.0",
       "npm:sass@^1.79.4": "npm:sass@1.79.4",
       "npm:vite": "npm:vite@5.4.8_sass@1.79.4",
       "npm:vite@^5.2.10": "npm:vite@5.4.8_sass@1.79.4",
@@ -445,6 +446,10 @@
         "integrity": "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==",
         "dependencies": {}
       },
+      "highlight.js@11.10.0": {
+        "integrity": "sha512-SYVnVFswQER+zu1laSya563s+F8VDGt7o35d4utbamowvUNLLMovFqwCLSocpZTz3MgaSRA1IbqRWZv97dtErQ==",
+        "dependencies": {}
+      },
       "htmlparser2@9.1.0": {
         "integrity": "sha512-5zfg6mHUoaer/97TxnGpxmbR7zJtPwIYFMZ/H5ucTlPZhKvtum05yiPK3Mgai3a0DyVxv7qYqoweaEd2nrYQzQ==",
         "dependencies": {
@@ -630,6 +635,7 @@
       "dependencies": [
         "npm:axios@^1.7.7",
         "npm:cheerio@^1.0.0",
+        "npm:highlight.js@^11.10.0",
         "npm:sass@^1.79.4",
         "npm:vite@^5.4.8",
         "npm:vue-router@^4.4.5",
