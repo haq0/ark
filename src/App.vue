@@ -10,6 +10,9 @@
         </router-view>
       </div>
     </div>
+    <div v-if="isMobile && !isSidebarOpen" class="mobile-menu-toggle" @click="toggleSidebar">
+      <i class="fas fa-bars"></i>
+    </div>
   </div>
 </template>
 
@@ -19,6 +22,7 @@ import Sidebar from "./components/Sidebar.vue";
 
 const currentTheme = ref(localStorage.getItem('theme') || 'dark');
 const isSidebarOpen = ref(localStorage.getItem('sidebarOpen') !== 'false');
+const isMobile = ref(false);
 
 const changeTheme = (theme) => {
   currentTheme.value = theme;
@@ -31,12 +35,18 @@ const toggleSidebar = () => {
   localStorage.setItem('sidebarOpen', isSidebarOpen.value);
 };
 
+const checkMobile = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
+
 provide('currentTheme', currentTheme);
 provide('changeTheme', changeTheme);
 provide('isSidebarOpen', isSidebarOpen);
 
 onMounted(() => {
   document.body.className = currentTheme.value;
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
 });
 
 watch(currentTheme, (newTheme) => {
@@ -150,6 +160,20 @@ button {
   }
 }
 
+.mobile-menu-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-color);
+  padding: 0.5rem;
+  border-radius: 50%;
+  font-size: 1.8rem;
+  cursor: pointer;
+  display: none;
+}
+
 @media (max-width: 768px) {
   .content-wrapper {
     margin-left: 0;
@@ -157,6 +181,14 @@ button {
 
   body {
     font-size: 14px;
+  }
+
+  .mobile-menu-toggle {
+    display: block;
+  }
+
+  .sidebar-closed .content-wrapper {
+    margin-left: 0;
   }
 }
 </style>

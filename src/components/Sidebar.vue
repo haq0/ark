@@ -1,5 +1,5 @@
 <template>
-  <aside :class="{ 'is-open': isOpen }">
+  <aside :class="{ 'is-open': isOpen, 'is-mobile': isMobile }">
     <div class="top-section">
       <div class="logo">
         <img src="../assets/profile-picture.jpg" alt="haquire" class="profile-picture">
@@ -95,62 +95,83 @@ aside {
   left: 0;
   bottom: 0;
   z-index: 100;
-  transform: translateX(-100%);
+  transform: translateX(0); // Remove the initial transform
 
   &.is-open {
     transform: translateX(0);
   }
 
+  &.is-mobile {
+    transform: translateX(-100%);
+    width: 100%;
+
+    &.is-open {
+      transform: translateX(0);
+    }
+  }
+
+  &:not(.is-open) {
+    width: 70px; // Set a fixed width of 70px when closed
+  }
+
+  &.is-open {
+    width: var(--sidebar-width);
+  }
+
   .top-section {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem; // Increased from 1rem to 2rem
+    position: relative;
   }
 
   .logo {
+    margin-bottom: 0.5rem; // Reduced from 1rem to 0.5rem
     .profile-picture {
-      width: 2.4rem;
-      height: 2.4rem;
+      width: 3rem;
+      height: 3rem;
       border-radius: 50%;
       object-fit: cover;
     }
   }
 
   .menu-toggle {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--sidebar-color);
     transition: 0.2s ease-out;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
+    padding: 0.5rem;
+    position: absolute;
+    top: calc(100% - 0.5rem); // Moved up slightly
+    left: 50%;
+    transform: translateX(-50%);
 
     &:hover {
       color: var(--primary);
     }
   }
 
-  h3, .button .text {
-    opacity: 0;
-    transition: 0.3s ease-out;
-  }
-
   &.is-open {
-    h3, .button .text {
-      opacity: 1;
+    .top-section {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center; // Changed from flex-start to center
+      padding-right: 1rem;
     }
-  }
 
-  h3 {
-    color: var(--grey);
-    font-size: 1.05rem;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
+    .menu-toggle {
+      position: static;
+      transform: none;
+    }
   }
 
   .menu {
     margin: 0 -1rem;
+    overflow: hidden;
+    padding-top: 1rem; // Added padding to move menu items down
 
     .button {
       display: flex;
@@ -158,6 +179,7 @@ aside {
       text-decoration: none;
       padding: 0.5rem 1rem;
       transition: 0.2s ease-out;
+      white-space: nowrap;
 
       .fas, .fab {
         font-size: 1.8rem;
@@ -165,13 +187,17 @@ aside {
         transition: 0.2s ease-out;
         width: 2.4rem;
         text-align: center;
+        margin-right: 0.5rem;
       }
 
       .text {
         color: var(--sidebar-color);
         transition: 0.2s ease-out;
-        margin-left: 0.5rem;
         font-size: 1.2rem;
+        opacity: 0;
+        max-width: 0;
+        overflow: hidden;
+        transition: opacity 0.2s ease-out, max-width 0.2s ease-out;
       }
 
       &:hover, &.router-link-exact-active {
@@ -185,6 +211,28 @@ aside {
       &.router-link-exact-active {
         border-right: 5px solid var(--primary);
       }
+    }
+  }
+
+  &:not(.is-open) {
+    .menu .button {
+      width: 70px; // Adjust button width to match sidebar width
+      justify-content: center;
+
+      .fas, .fab {
+        margin-right: 0;
+      }
+
+      .text {
+        display: none;
+      }
+    }
+  }
+
+  &.is-open {
+    .menu .button .text {
+      opacity: 1;
+      max-width: 200px; // Adjust this value as needed
     }
   }
 
@@ -205,6 +253,20 @@ aside {
     &.is-open {
       transform: translateX(0);
     }
+
+    &:not(.is-open) {
+      width: 0; // Hide completely on mobile when closed
+    }
+  }
+
+  .menu-toggle {
+    position: fixed;
+    top: 1rem;
+    left: 1rem; // Change from right to left
+    z-index: 1000;
+    background-color: var(--sidebar-bg);
+    padding: 0.5rem;
+    border-radius: 50%;
   }
 }
 </style>
