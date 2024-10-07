@@ -1,6 +1,6 @@
 <template>
-  <div class="app" :class="[currentTheme, { 'sidebar-closed': !isSidebarOpen }]">
-    <Sidebar @toggle-sidebar="toggleSidebar" :is-open="isSidebarOpen" />
+  <div class="app" :class="[currentTheme, { 'sidebar-open': sidebarStore.isOpen }]">
+    <Sidebar />
     <div class="content-wrapper">
       <div class="content">
         <router-view v-slot="{ Component }">
@@ -10,18 +10,16 @@
         </router-view>
       </div>
     </div>
-    <div v-if="isMobile && !isSidebarOpen" class="mobile-menu-toggle" @click="toggleSidebar">
-      <i class="fas fa-bars"></i>
-    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, provide, onMounted, watch } from 'vue';
+import { useSidebarStore } from './stores/sidebarStore';
 import Sidebar from "./components/Sidebar.vue";
 
+const sidebarStore = useSidebarStore();
 const currentTheme = ref(localStorage.getItem('theme') || 'dark');
-const isSidebarOpen = ref(localStorage.getItem('sidebarOpen') !== 'false');
 const isMobile = ref(false);
 
 const changeTheme = (theme) => {
@@ -30,18 +28,12 @@ const changeTheme = (theme) => {
   document.body.className = theme;
 };
 
-const toggleSidebar = () => {
-  isSidebarOpen.value = !isSidebarOpen.value;
-  localStorage.setItem('sidebarOpen', isSidebarOpen.value);
-};
-
 const checkMobile = () => {
   isMobile.value = window.innerWidth <= 768;
 };
 
 provide('currentTheme', currentTheme);
 provide('changeTheme', changeTheme);
-provide('isSidebarOpen', isSidebarOpen);
 
 onMounted(() => {
   document.body.className = currentTheme.value;
@@ -57,6 +49,7 @@ watch(currentTheme, (newTheme) => {
 <style lang="scss">
 :root {
   --sidebar-width: 300px;
+  --sidebar-collapsed-width: calc(2rem + 32px);
   --sidebar-bg: #2c3e50;
   --sidebar-color: #ecf0f1;
   --card-bg: #f0f0f0;
@@ -80,7 +73,7 @@ watch(currentTheme, (newTheme) => {
   --dark: #c0caf5;
   --dark-alt: #a9b1d6;
   --light: #1f2335;
-  --card-bg: #1e1e2e; /* Updated dark mode card background color */
+  --card-bg: #1e1e2e;
   --text-primary: #fff;
   --text-secondary: #aaa;
 }
@@ -106,24 +99,26 @@ body {
 .app {
   display: flex;
   min-height: 100vh;
+  background-color: var(--light);
 }
 
 .content-wrapper {
   flex: 1;
+  margin-left: var(--sidebar-collapsed-width);
+  width: calc(100% - var(--sidebar-collapsed-width));
   transition: margin-left 0.3s ease-in-out;
-  margin-left: var(--sidebar-width);
 }
 
-.sidebar-closed .content-wrapper {
-  margin-left: 0;
+.sidebar-open .content-wrapper {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
 }
 
 .content {
-  background: var(--light);
-  color: var(--dark);
   padding: 2rem;
   min-height: 100vh;
   overflow-y: auto;
+  background-color: var(--light);
 }
 
 main {
@@ -160,35 +155,19 @@ button {
   }
 }
 
-.mobile-menu-toggle {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 1000;
-  background-color: var(--sidebar-bg);
-  color: var(--sidebar-color);
-  padding: 0.5rem;
-  border-radius: 50%;
-  font-size: 1.8rem;
-  cursor: pointer;
-  display: none;
-}
-
 @media (max-width: 768px) {
   .content-wrapper {
     margin-left: 0;
+    width: 100%;
+  }
+
+  .sidebar-open .content-wrapper {
+    margin-left: 0;
+    width: 100%;
   }
 
   body {
     font-size: 14px;
-  }
-
-  .mobile-menu-toggle {
-    display: block;
-  }
-
-  .sidebar-closed .content-wrapper {
-    margin-left: 0;
   }
 }
 </style>

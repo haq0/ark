@@ -1,43 +1,46 @@
 <template>
-  <aside :class="{ 'is-open': isOpen, 'is-mobile': isMobile }">
+  <aside :class="{ 'is-open': sidebarStore.isOpen, 'mobile': isMobile }">
     <div class="top-section">
       <div class="logo">
         <img src="../assets/profile-picture.jpg" alt="haquire" class="profile-picture">
       </div>
-      <button class="menu-toggle" @click="toggleMenu">
-        <i class="fas fa-bars"></i>
-      </button>
+      <div class="menu-toggle-wrapper" :class="{ 'open': sidebarStore.isOpen }">
+        <button class="menu-toggle" @click="ToggleMenu">
+          <span class="material-icons">{{ sidebarStore.isOpen ? 'menu_open' : 'menu' }}</span>
+        </button>
+      </div>
     </div>
+    <h3 v-if="sidebarStore.isOpen">Menu</h3>
     <div class="menu">
       <router-link class="button" to="/" @click="closeMenuOnMobile">
-        <i class="fas fa-home"></i>
-        <span class="text">Home</span>
+        <span class="material-icons">dashboard</span>
+        <span class="text">Dashboard</span>
       </router-link>
       <router-link class="button" to="/projects" @click="closeMenuOnMobile">
-        <i class="fas fa-project-diagram"></i>
+        <span class="material-icons">code</span>
         <span class="text">Projects</span>
       </router-link>
       <router-link class="button" to="/about" @click="closeMenuOnMobile">
-        <i class="fas fa-user"></i>
+        <span class="material-icons">person_outline</span>
         <span class="text">About</span>
       </router-link>
       <router-link class="button" to="/contact" @click="closeMenuOnMobile">
-        <i class="fas fa-envelope"></i>
+        <span class="material-icons">mail_outline</span>
         <span class="text">Contact</span>
       </router-link>
       <router-link class="button" to="/blog" @click="closeMenuOnMobile">
-        <i class="fas fa-blog"></i>
+        <span class="material-icons">create</span>
         <span class="text">Blog</span>
       </router-link>
       <router-link class="button" to="/photography" @click="closeMenuOnMobile">
-        <i class="fas fa-camera"></i>
+        <span class="material-icons">photo_camera</span>
         <span class="text">Photography</span>
       </router-link>
     </div>
     <div class="flex"></div>
     <div class="menu bottom-section">
       <router-link class="button" to="/settings" @click="closeMenuOnMobile">
-        <i class="fas fa-cog"></i>
+        <span class="material-icons">settings</span>
         <span class="text">Settings</span>
       </router-link>
     </div>
@@ -46,32 +49,47 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useSidebarStore } from '../stores/sidebarStore';
 
-const props = defineProps(['isOpen']);
-const emit = defineEmits(['toggle-sidebar']);
-
+const route = useRoute();
+const sidebarStore = useSidebarStore();
 const isMobile = ref(false);
 
-const toggleMenu = () => {
-  emit('toggle-sidebar');
-};
+const ToggleMenu = () => {
+  sidebarStore.toggleSidebar();
+}
 
 const closeMenuOnMobile = () => {
   if (isMobile.value) {
-    emit('toggle-sidebar');
+    sidebarStore.setSidebarOpen(false);
   }
-};
+}
 
 const checkMobile = () => {
   isMobile.value = window.innerWidth <= 768;
-};
+}
 
 const handleResize = () => {
+  const wasMobile = isMobile.value;
   checkMobile();
-};
+  
+  if (!isMobile.value && wasMobile) {
+    // Transitioning from mobile to desktop
+    if (!wasClosedByUser.value) {
+      is_open.value = true;
+      localStorage.setItem('is_open', 'true');
+    }
+  } else if (isMobile.value && !wasMobile) {
+    // Transitioning from desktop to mobile
+    is_open.value = false;
+    localStorage.setItem('is_open', 'false');
+  }
+}
 
 onMounted(() => {
   checkMobile();
+  handleResize();
   window.addEventListener('resize', handleResize);
 });
 
@@ -84,155 +102,127 @@ onUnmounted(() => {
 aside {
   display: flex;
   flex-direction: column;
-  width: var(--sidebar-width);
+  width: var(--sidebar-collapsed-width);
   min-height: 100vh;
-  padding: 1rem;
+  padding: 0.5rem 0;
   background-color: var(--sidebar-bg);
   color: var(--sidebar-color);
-  transition: 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out;
   position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
   z-index: 100;
-  transform: translateX(0); // Remove the initial transform
-
-  &.is-open {
-    transform: translateX(0);
-  }
-
-  &.is-mobile {
-    transform: translateX(-100%);
-    width: 100%;
-
-    &.is-open {
-      transform: translateX(0);
-    }
-  }
-
-  &:not(.is-open) {
-    width: 70px; // Set a fixed width of 70px when closed
-  }
+  overflow: hidden;
 
   &.is-open {
     width: var(--sidebar-width);
   }
 
   .top-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem; // Increased from 1rem to 2rem
     position: relative;
+    height: 5rem;
+    margin-bottom: 0.5rem;
   }
 
   .logo {
-    margin-bottom: 0.5rem; // Reduced from 1rem to 0.5rem
+    width: 2.5rem;
+    height: 2.5rem;
+    overflow: hidden;
+    border-radius: 50%;
+    position: absolute;
+    top: 0.75rem;
+    left: calc((var(--sidebar-collapsed-width) - 2.5rem) / 2);
+    z-index: 2;
+
     .profile-picture {
-      width: 3rem;
-      height: 3rem;
-      border-radius: 50%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+      object-position: center;
     }
+  }
+
+  .menu-toggle-wrapper {
+    position: absolute;
+    top: 3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
   }
 
   .menu-toggle {
     font-size: 1.5rem;
     color: var(--sidebar-color);
-    transition: 0.2s ease-out;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
-    position: absolute;
-    top: calc(100% - 0.5rem); // Moved up slightly
-    left: 50%;
-    transform: translateX(-50%);
-
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
     &:hover {
       color: var(--primary);
     }
   }
 
-  &.is-open {
-    .top-section {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center; // Changed from flex-start to center
-      padding-right: 1rem;
-    }
-
-    .menu-toggle {
-      position: static;
-      transform: none;
-    }
+  h3 {
+    color: var(--grey);
+    font-size: 0.875rem;
+    margin: 0.5rem 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 0 1rem;
   }
 
   .menu {
-    margin: 0 -1rem;
-    overflow: hidden;
-    padding-top: 1rem; // Added padding to move menu items down
+    margin: 0;
 
     .button {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       text-decoration: none;
-      padding: 0.5rem 1rem;
-      transition: 0.2s ease-out;
-      white-space: nowrap;
+      padding: 0 1rem;
+      transition: background-color 0.3s ease-in-out;
+      height: 3rem;
+      overflow: hidden;
+      position: relative;
 
-      .fas, .fab {
+      .material-icons {
         font-size: 1.8rem;
         color: var(--sidebar-color);
         transition: 0.2s ease-out;
-        width: 2.4rem;
+        width: 2rem;
         text-align: center;
-        margin-right: 0.5rem;
+        flex-shrink: 0;
       }
 
       .text {
         color: var(--sidebar-color);
-        transition: 0.2s ease-out;
-        font-size: 1.2rem;
+        transition: opacity 0.3s ease-in-out;
+        font-size: 1rem;
+        white-space: nowrap;
         opacity: 0;
-        max-width: 0;
-        overflow: hidden;
-        transition: opacity 0.2s ease-out, max-width 0.2s ease-out;
+        position: absolute;
+        left: 3.5rem;
       }
 
       &:hover, &.router-link-exact-active {
         background-color: rgba(255, 255, 255, 0.1);
 
-        .fas, .fab, .text {
+        .material-icons, .text {
           color: var(--primary);
         }
       }
 
       &.router-link-exact-active {
-        border-right: 5px solid var(--primary);
+        border-right: 3px solid var(--primary);
       }
-    }
-  }
-
-  &:not(.is-open) {
-    .menu .button {
-      width: 70px; // Adjust button width to match sidebar width
-      justify-content: center;
-
-      .fas, .fab {
-        margin-right: 0;
-      }
-
-      .text {
-        display: none;
-      }
-    }
-  }
-
-  &.is-open {
-    .menu .button .text {
-      opacity: 1;
-      max-width: 200px; // Adjust this value as needed
     }
   }
 
@@ -241,32 +231,46 @@ aside {
   }
 
   .bottom-section {
-    margin-top: auto;
+    margin-top: 0.25rem;
+  }
+
+  &.is-open {
+    .menu-toggle-wrapper {
+      top: 0.75rem;
+      right: 0.5rem;
+      left: auto;
+      transform: none;
+    }
+
+    .menu .button {
+      .text {
+        opacity: 1;
+      }
+    }
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 769px) {
   aside {
-    width: 100%;
-    transform: translateX(-100%);
-
-    &.is-open {
-      transform: translateX(0);
+    .menu-toggle {
+      font-size: 2rem;
     }
 
-    &:not(.is-open) {
-      width: 0; // Hide completely on mobile when closed
+    h3 {
+      font-size: 1rem;
     }
-  }
 
-  .menu-toggle {
-    position: fixed;
-    top: 1rem;
-    left: 1rem; // Change from right to left
-    z-index: 1000;
-    background-color: var(--sidebar-bg);
-    padding: 0.5rem;
-    border-radius: 50%;
+    .menu {
+      .button {
+        .material-icons {
+          font-size: 2rem;
+        }
+
+        .text {
+          font-size: 1.1rem;
+        }
+      }
+    }
   }
 }
 </style>

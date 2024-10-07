@@ -6,6 +6,7 @@
       "npm:axios@^1.7.7": "npm:axios@1.7.7",
       "npm:cheerio@^1.0.0": "npm:cheerio@1.0.0",
       "npm:highlight.js@^11.10.0": "npm:highlight.js@11.10.0",
+      "npm:pinia@^2.2.4": "npm:pinia@2.2.4_vue@3.5.10",
       "npm:sass@^1.79.4": "npm:sass@1.79.4",
       "npm:vite": "npm:vite@5.4.8_sass@1.79.4",
       "npm:vite@^5.2.10": "npm:vite@5.4.8_sass@1.79.4",
@@ -518,6 +519,14 @@
         "integrity": "sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==",
         "dependencies": {}
       },
+      "pinia@2.2.4_vue@3.5.10": {
+        "integrity": "sha512-K7ZhpMY9iJ9ShTC0cR2+PnxdQRuwVIsXDO/WIEV/RnMC/vmSoKDTKW/exNQYPI+4ij10UjXqdNiEHwn47McANQ==",
+        "dependencies": {
+          "@vue/devtools-api": "@vue/devtools-api@6.6.4",
+          "vue": "vue@3.5.10",
+          "vue-demi": "vue-demi@0.14.10_vue@3.5.10"
+        }
+      },
       "postcss@8.4.47": {
         "integrity": "sha512-56rxCq7G/XfB4EkXq9Egn5GCqugWvDFjafDOThIdMBsI15iqPqR5r15TfSr1YPYeEI19YeaXMCbY6u88Y76GLQ==",
         "dependencies": {
@@ -600,6 +609,12 @@
           "sass": "sass@1.79.4"
         }
       },
+      "vue-demi@0.14.10_vue@3.5.10": {
+        "integrity": "sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==",
+        "dependencies": {
+          "vue": "vue@3.5.10"
+        }
+      },
       "vue-router@4.4.5_vue@3.5.10": {
         "integrity": "sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==",
         "dependencies": {
@@ -636,6 +651,7 @@
         "npm:axios@^1.7.7",
         "npm:cheerio@^1.0.0",
         "npm:highlight.js@^11.10.0",
+        "npm:pinia@^2.2.4",
         "npm:sass@^1.79.4",
         "npm:vite@^5.4.8",
         "npm:vue-router@^4.4.5",
