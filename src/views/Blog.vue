@@ -1,8 +1,11 @@
 <template>
   <main class="blog">
     <h1 class="title">Blog</h1>
-    <div class="blog-posts">
-      <article v-for="post in blogPosts" :key="post.id" class="blog-post">
+    <div v-if="blogPosts.length === 0" class="no-posts">
+      No blog posts found.
+    </div>
+    <div v-else class="blog-posts">
+      <article v-for="post in blogPosts" :key="post.slug" class="blog-post">
         <h2 class="post-title">{{ post.title }}</h2>
         <p class="post-date">{{ formatDate(post.date) }}</p>
         <p class="post-read-time">{{ post.readTime }} min read</p>
@@ -17,26 +20,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
-const blogPosts = ref([
-  {
-    id: 1,
-    title: "Haskell vs OCaml: A Tale of Two Functional Languages",
-    slug: "haskell-vs-ocaml",
-    date: "2023-05-15",
-    author: "haquire",
-    excerpt: "In the realm of functional programming, Haskell and OCaml stand out as two powerful and influential languages. Let's dive into a comparison of these two fascinating languages.",
-    image: "/images/blog/haskell-vs-ocaml.jpg",
-    tags: ["Functional Programming", "Haskell", "OCaml"],
-    readTime: 10
-  }
-]);
+const blogPosts = ref([]);
 
 const formatDate = (dateString) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
+
+onMounted(async () => {
+  try {
+    const response = await fetch('/blog-posts/posts.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const posts = await response.json();
+    blogPosts.value = posts;
+    console.log('Loaded blog posts:', posts);
+  } catch (error) {
+    console.error('Error loading blog posts:', error);
+  }
+});
 </script>
 
 <style scoped>
@@ -141,5 +146,12 @@ const formatDate = (dateString) => {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.no-posts {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin-top: 2rem;
 }
 </style>

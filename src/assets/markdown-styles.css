@@ -1,0 +1,153 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--light);
+}
+
+.blog-post {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+pre {
+  background-color: var(--card-bg);
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+}
+
+blockquote {
+  border-left: 4px solid var(--primary);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.table-of-contents {
+  background-color: var(--card-bg);
+  border: 1px solid var(--grey);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.table-of-contents h2 {
+  margin-top: 0;
+}
+
+.table-of-contents ul {
+  list-style-type: none;
+  padding-left: 1rem;
+}
+.table-of-contents ul ul {
+  padding-left: 1.5rem;
+}
+.table-of-contents a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.table-of-contents a:hover {
+  text-decoration: underline;
+}
+.table-of-contents .toc-level-2 {
+  margin-left: 1rem;
+}
+
+.table-of-contents .toc-level-3 {
+  margin-left: 2rem;
+}
+
+.custom-block {
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.custom-block.note {
+  background-color: rgba(122, 162, 247, 0.1);
+  border-left: 4px solid var(--primary);
+}
+
+.custom-block.warning {
+  background-color: rgba(255, 204, 0, 0.1);
+  border-left: 4px solid #ffcc00;
+}
+
+.custom-block.tip {
+  background-color: rgba(46, 213, 115, 0.1);
+  border-left: 4px solid #2ed573;
+}
+
+.custom-block-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.task-list-item {
+  list-style-type: none;
+}
+
+.task-list-item input {
+  margin-right: 0.5rem;
+}
+
+figure {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+figcaption {
+  font-style: italic;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+ul, ol {
+  text-align: left;
+  list-style-position: inside;
+  padding-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* Nested lists */
+ul ul, ol ul, ul ol, ol ol {
+  padding-left: 1.5rem;
+}
