@@ -2,8 +2,13 @@
   <main class="photography">
     <h1 class="title">Photography Portfolio</h1>
     <div class="photo-grid">
-      <div v-for="photo in photos" :key="photo.id" class="photo-item">
-        <img :src="photo.url" :alt="photo.title" @click="openLightbox(photo)">
+      <div v-for="photo in visiblePhotos" :key="photo.id" class="photo-item">
+        <img 
+          :src="photo.url" 
+          :alt="photo.title" 
+          @click="openLightbox(photo)"
+          loading="lazy"
+        >
         <p class="photo-title">{{ photo.title }}</p>
       </div>
     </div>
@@ -17,11 +22,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
+import { useIntersectionObserver } from '@vueuse/core';
 
 const photos = ref([]);
 const lightboxOpen = ref(false);
 const currentPhoto = ref(null);
+const lastVisibleIndex = ref(20); // Initial number of visible photos
 
 const openLightbox = (photo) => {
   currentPhoto.value = photo;
@@ -32,38 +39,34 @@ const closeLightbox = () => {
   lightboxOpen.value = false;
 };
 
-const stripExif = (img) => {
-  return new Promise((resolve) => {
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0, img.width, img.height);
-    canvas.toBlob((blob) => {
-      resolve(URL.createObjectURL(blob));
-    }, 'image/jpeg');
-  });
+const visiblePhotos = computed(() => {
+  return photos.value.slice(0, lastVisibleIndex.value);
+});
+
+const loadMorePhotos = () => {
+  lastVisibleIndex.value += 20; // Load 20 more photos
 };
 
 onMounted(async () => {
   const imageContext = import.meta.glob('../assets/photography/*.{jpg,jpeg,png,gif}', { eager: true });
-  
-  for (const path in imageContext) {
+
+  photos.value = Object.entries(imageContext).map(([path, module], index) => {
     const fileName = path.split('/').pop();
     const title = fileName.split('.')[0];
-    const url = imageContext[path].default;
-
-    const img = new Image();
-    img.onload = async () => {
-      const strippedUrl = await stripExif(img);
-      photos.value.push({
-        id: photos.value.length + 1,
-        title,
-        url: strippedUrl
-      });
+    return {
+      id: index + 1,
+      title,
+      url: module.default
     };
-    img.src = url;
-  }
+  });
+
+  // Set up intersection observer for infinite scrolling
+  const el = document.querySelector('.photo-grid');
+  useIntersectionObserver(el, ([{ isIntersecting }]) => {
+    if (isIntersecting) {
+      loadMorePhotos();
+    }
+  }, { threshold: 0.5 });
 });
 </script>
 
@@ -169,3 +172,4 @@ onMounted(async () => {
   }
 }
 </style>
+
