@@ -31,10 +31,8 @@ Android 15's Private Space feature offers enhanced privacy and security for user
 4. **Install Alternate App Store**
    Download and install your preferred alternate app store, such as F-Droid or Aurora Store.
 
-::: tip
-test
-:::
-
 By following these steps, you can safely install and use alternate app stores within your Private Space, maintaining an additional layer of privacy and security for your apps and data.
 
+::: warning
 Remember to exercise caution when installing apps from alternate sources and always verify the authenticity of the app stores you use.
+:::
