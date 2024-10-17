@@ -22,11 +22,11 @@ Android 15's Private Space feature offers enhanced privacy and security for user
 
 3. **Enable App Installations**
    You can do this directly in the settings, or by trying to install an app.
-   <img src="../../src/assets/AllowApp.png" alt="alt text" width="320" height="660">
+   <img src="/asr/AllowApp.png" alt="alt text" width="320" height="660">
 
    **And then, enable the option to install apps from unknown sources.**
 
-   <img src="../../src/assets/Confirm.png" alt="alt text" width="320" height="660">
+   <img src="/asr/Confirm.png" alt="alt text" width="320" height="660">
 
 4. **Install Alternate App Store**
    Download and install your preferred alternate app store, such as F-Droid or Aurora Store.
