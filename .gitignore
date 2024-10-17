@@ -12,6 +12,9 @@ dist
 dist-ssr
 .vite
 *.local
+./public/processed-photos/*
+./public/blog-posts/*
+
 
 # Editor directories and files
 .vscode/*

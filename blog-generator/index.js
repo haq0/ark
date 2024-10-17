@@ -26,7 +26,7 @@ ${text}
   },
 
   listitem(text) {
-    return `<li style="margin-bottom: 0.5rem;">${text}</li>`;
+    return `<li">${text}</li>`;
   },
 
   code(code, language) {
@@ -74,20 +74,18 @@ ${marked.parseInline(collapseContent.join('\n'))}
     return `<p>${text}</p>`;
   },
 
-  link(href, title, text) {
-    return `<a href="${href}" title="${title || ''}">${text}</a>`;
-  },
 
-  image(href, title, text) {
-    const alignMatch = title ? title.match(/align-(left|center|right)/) : null;
-    const align = alignMatch ? alignMatch[1] : 'center';
-    const caption = title ? title.replace(/align-(left|center|right)/, '').trim() : '';
-    return `
-<figure style="text-align: ${align};">
-<img src="${href}" alt="${text}" title="${caption}">
-${caption ? `<figcaption>${caption}</figcaption>` : ''}
-</figure>
-`;
+
+image(href, title, text) {
+  const alignMatch = title ? title.match(/align-(left|center|right)/) : null;
+  const align = alignMatch ? alignMatch[1] : 'center';
+  const caption = title ? title.replace(/align-(left|center|right)/, '').trim() : '';
+  return `
+    <figure style="text-align: ${align};">
+      <img src="${href}" alt="${text}" title="${caption}">
+      ${caption ? `<figcaption>${caption}</figcaption>` : ''}
+    </figure>
+  `;
   }
 };
 
@@ -227,9 +225,6 @@ if (data.toc === true) {
       }
       .toc-container ul {
         padding-left: 20px;
-      }
-      .toc-container li {
-        margin-bottom: 5px;
       }
     </style>
 </head>
