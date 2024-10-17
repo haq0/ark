@@ -211,7 +211,7 @@ if (data.toc === true) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${data.title || 'Untitled Post'}</title>
-    <link rel="stylesheet" href="../src/assets/markdown-styles.css">
+    <link rel="stylesheet" href="/asr/markdown-styles.css">
     <style>
       .toc-container {
         background-color: var(--toc-bg, #f0f0f0); /* Slightly darker shade */

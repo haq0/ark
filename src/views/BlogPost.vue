@@ -23,7 +23,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-@import '../../src/assets/markdown-styles.css';
+@import '/asr/markdown-styles.css';
 
 .blog-post {
   max-width: 800px;
