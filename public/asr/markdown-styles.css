@@ -5,6 +5,33 @@ body {
   background-color: var(--light);
 }
 
+.blog-image {
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .blog-image {
+    max-width: 80%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .blog-image {
+    max-width: 70%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .blog-image {
+    max-width: 60%;
+  }
+}
+
 .blog-post {
   max-width: 800px;
   margin: 0 auto;
